@@ -13,39 +13,41 @@ pipeline{
 
 	stages {
 
-		stage('Build') {
-			steps {
-				sh """
-                    docker build -t paulomalem/first:$BUILD_NUMBER .
-                """
-                // sh """
-                //     N/A :D
-                // """
-            }
-		}
-		stage('Login') {
-			steps {
-				sh """
-                    echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
-                """
-                // sh """
-                //     N/A :D
-                // """                
-			}
-		}
-		stage('Push') {
-			steps {
-				sh """
-                    docker push 'paulomalem/first:$BUILD_NUMBER'
-                """
-                // sh """
-                //     N/A :D
-                // """
-			}
-		}
+		// stage('Build') {
+		// 	steps {
+		// 		sh """
+        //             docker build -t paulomalem/first:$BUILD_NUMBER .
+        //         """
+        //         // sh """
+        //         //     N/A :D
+        //         // """
+        //     }
+		// }
+		// stage('Login') {
+		// 	steps {
+		// 		sh """
+        //             echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
+        //         """
+        //         // sh """
+        //         //     N/A :D
+        //         // """                
+		// 	}
+		// }
+		// stage('Push') {
+		// 	steps {
+		// 		sh """
+        //             docker push 'paulomalem/first:$BUILD_NUMBER'
+        //         """
+        //         // sh """
+        //         //     N/A :D
+        //         // """
+		// 	}
+		// }
 		stage('Deploy') {
 			steps {
                 sh """
+                    echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
+                    docker build -t paulomalem/first:$BUILD_NUMBER .
                     docker push 'paulomalem/first:$BUILD_NUMBER'
                 // """
                 //     kubectl --kubeconfig $DEV_KUBECONFIG get pods
