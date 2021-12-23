@@ -11,20 +11,17 @@ pipeline{
 		stage('Build') {
 			steps {
 				sh """
-                    echo $BUILD_NUMBER
-                """        
-			}
-			// steps {
-			// 	sh 'docker build -t paulomalem/first:$BUILD_NUMBER .'
-			// }
+                    docker build -t paulomalem/first:$BUILD_NUMBER .'
+                """
+            }
 		}
-		// stage('Login') {
-		// 	steps {
-		// 		sh """
-        //             echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
-        //         """
-		// 	}
-		// }
+		stage('Login') {
+			steps {
+				sh """
+                    echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
+                """
+			}
+		}
 		// stage('Push') {
 		// 	steps {
 		// 		sh """
@@ -33,10 +30,10 @@ pipeline{
 		// 	}
 		// }
 	}
-	// post {
-	// 	always {
-	// 		sh 'docker logout'
-	// 	}
-	// }
+	post {
+		always {
+			sh 'docker logout'
+		}
+	}
 
 }
