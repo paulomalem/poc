@@ -50,6 +50,7 @@ pipeline{
                     echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
                     docker build -t paulomalem/first:$BUILD_NUMBER .
                     docker push 'paulomalem/first:$BUILD_NUMBER'
+                    exit 0
                 // """
                 //     kubectl --kubeconfig $DEV_KUBECONFIG get pods
                 //     for yml in k8s/development/* ; do envsubst < $yml | kubectl apply -f - ; done
