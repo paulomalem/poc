@@ -47,7 +47,7 @@ pipeline{
 			steps {
                 // echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
                 sh """
-                    docker login -u $DOCKERHUB_CREDENTIALS_USR -p $DOCKERHUB_CREDENTIALS_PSW --password-stdin docker.io
+                    echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
                     docker build -t paulomalem/first:$BUILD_NUMBER .
                     docker push 'paulomalem/first:$BUILD_NUMBER'
                 // """
