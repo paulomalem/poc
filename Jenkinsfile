@@ -47,7 +47,7 @@ pipeline{
 			steps {
                 // echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
                 sh """
-                    docker build first .
+                    docker build -t first .
                     docker tag first paulomalem/first:$BUILD_NUMBER
                     docker logout
                     echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
