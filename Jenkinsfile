@@ -74,10 +74,10 @@ pipeline{
             }
         }        
 	}
-	// post {
-	// 	always {
-	// 		sh 'docker logout'
-	// 	}
-	// }
+	post {
+		always {
+			sh 'rm -rf ~/.kube'
+		}
+	}
 
 }
