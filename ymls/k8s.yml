@@ -1,47 +1,47 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: ${DOCKERHUB_CREDENTIALS_USR}
+  name: $DOCKERHUB_CREDENTIALS_USR
   labels:
-    app: ${DOCKERHUB_CREDENTIALS_USR}
-    service: ${DOCKERHUB_CREDENTIALS_USR}
+    app: $DOCKERHUB_CREDENTIALS_USR
+    service: $DOCKERHUB_CREDENTIALS_USR
 spec:
   type: ClusterIP
   ports:
     - targetPort: 80
       port: 5000
   selector:
-    app: ${DOCKERHUB_CREDENTIALS_USR}
+    app: $DOCKERHUB_CREDENTIALS_USR
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: ${DOCKERHUB_CREDENTIALS_USR}
+  name: $DOCKERHUB_CREDENTIALS_USR
   labels:
-    account: ${DOCKERHUB_CREDENTIALS_USR}
+    account: $DOCKERHUB_CREDENTIALS_USR
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ${DOCKERHUB_CREDENTIALS_USR}
+  name: $DOCKERHUB_CREDENTIALS_USR
   labels:
-    app: ${DOCKERHUB_CREDENTIALS_USR}
+    app: $DOCKERHUB_CREDENTIALS_USR
     version: v1
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: ${DOCKERHUB_CREDENTIALS_USR}
+      app: $DOCKERHUB_CREDENTIALS_USR
       version: v1
   template:
     metadata:
       labels:
-        app: ${DOCKERHUB_CREDENTIALS_USR}
+        app: $DOCKERHUB_CREDENTIALS_USR
         version: v1
     spec:
-      serviceAccountName: ${DOCKERHUB_CREDENTIALS_USR}
+      serviceAccountName: $DOCKERHUB_CREDENTIALS_USR
       containers:
-      - name: ${DOCKERHUB_CREDENTIALS_USR}
+      - name: $DOCKERHUB_CREDENTIALS_USR
         image: primeiro:v1
         imagePullPolicy: IfNotPresent
         ports:
@@ -50,7 +50,7 @@ spec:
 # apiVersion: networking.istio.io/v1alpha3
 # kind: VirtualService
 # metadata:
-#   name: vs-${DOCKERHUB_CREDENTIALS_USR}
+#   name: vs-$DOCKERHUB_CREDENTIALS_USR
 # spec:
 #   hosts:
 #   - "*"
@@ -62,6 +62,6 @@ spec:
 #             prefix: /first
 #       route:
 #         - destination:
-#             host: ${DOCKERHUB_CREDENTIALS_USR}
+#             host: $DOCKERHUB_CREDENTIALS_USR
 #             port:
 #               number: 5000
