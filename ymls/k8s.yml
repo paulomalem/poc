@@ -45,7 +45,7 @@ spec:
       serviceAccountName: primeiro-servico
       containers:
       - name: primeiro-servico
-        image: primeiro:v1
+        image: paulomalem/first:$BUILD_NUMBER
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 80
