@@ -69,7 +69,6 @@ pipeline{
                     sh 'cat $KUBECRED > ~/.kube/config'
                     sh 'kubectl get nodes'
                 }
-}
             }
         }        
 	}
