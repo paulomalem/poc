@@ -66,6 +66,7 @@ pipeline{
             }
             steps {
                 withCredentials([file(credentialsId: 'dev-kubeconfig-cred', variable: 'KUBECRED')]) {
+                    sh 'mkdir ~/.kube'
                     sh 'cat $KUBECRED > ~/.kube/config'
                     sh 'kubectl get nodes'
                 }
