@@ -7,7 +7,7 @@ pipeline{
 		REDIS_PASSWORD=credentials('redis-password-cred')
 		SERVICO_2_BASE_URL=credentials('servico-dois-base-url-cred')
 		SENHA_POSTGRES=credentials('senha-postgress-cred')
-        // DEV_KUBECONFIG = credentials('dev-kubeconfig-cred')
+        DEV_KUBECONFIG = credentials('dev-kubeconfig-cred')
         // PRD_KUBECONFIG = credentials('prd-kubeconfig-cred')
 	}
 
@@ -65,7 +65,11 @@ pipeline{
                 branch 'main'
             }
             steps {
-                echo 'Deploying'
+                withCredentials([file(credentialsId: 'dev-kubeconfig-cred', variable: 'KUBECRED')]) {
+                    sh 'cat $KUBECRED > ~/.kube/config'
+                    sh 'kubectl get nodes'
+                }
+}
             }
         }        
 	}
