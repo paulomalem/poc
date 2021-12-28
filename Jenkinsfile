@@ -52,12 +52,7 @@ pipeline{
                     docker logout
                     echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
                     docker push paulomalem/first:$BUILD_NUMBER || exit 0
-                // """
-                //     kubectl --kubeconfig $DEV_KUBECONFIG get pods
-                //     for yml in k8s/development/* ; do envsubst < $yml | kubectl apply -f - ; done
-                //     cat k8s/development/secret.yml
-                //     kubectl -n poc set image deployment/paulomalem/first:$BUILD_NUMBER
-                //     kubectl -n poc rollout status deployment.v1.apps/primeiro-servico
+                 """
 			}
 		}
         stage('Deploy K8S (Desenvolvimento)') {
@@ -70,6 +65,8 @@ pipeline{
                     sh 'cat $KUBECRED > ~/.kube/config'
                     sh 'kubectl get nodes'
                     sh 'for yml in ymls/* ; do envsubst < $yml | kubectl apply -f - ; done'
+                    sh 'kubectl -n poc set image deployment/paulomalem/first:$BUILD_NUMBER'
+                    sh 'kubectl -n poc rollout status deployment.v1.apps/primeiro-servico'
                 }
             }
         }        
