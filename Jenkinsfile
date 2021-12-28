@@ -69,7 +69,7 @@ pipeline{
                     sh 'mkdir ~/.kube'
                     sh 'cat $KUBECRED > ~/.kube/config'
                     sh 'kubectl get nodes'
-                    sh 'for yml in ymls/* ; do envsubst < $yml| less; done'
+                    sh 'for yml in ymls/* ; do envsubst < $yml | kubectl apply -f - ; done
                 }
             }
         }        
