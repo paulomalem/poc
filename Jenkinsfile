@@ -21,7 +21,7 @@ pipeline {
 		stage('Build') {
             // agent { label 'linux' }
 			steps {
-                sh """
+                sh """#!/bin/bash +x
                     docker build -t first .
                 """
             }
@@ -29,7 +29,7 @@ pipeline {
         stage('Tagging') {
             // agent { label 'linux' }
 			steps {
-				sh """
+				sh """#!/bin/bash +x
                     docker tag first paulomalem/first:$BUILD_NUMBER
                 """
 			}
@@ -37,7 +37,7 @@ pipeline {
 		stage('Push Image (DokerHub') {
             // agent { label 'linux' }
 			steps {
-				sh """
+				sh """#!/bin/bash +x
                     docker logout
                     echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
                     docker push paulomalem/first:$BUILD_NUMBER || exit 0
@@ -165,7 +165,11 @@ pipeline {
             }
             steps{
                 sh """#!/bin/bash +x
-                echo "Realizando Rollback ${env.PREVIOUS_IMAGE}"
+                    echo "Realizando Rollback ${env.PREVIOUS_IMAGE}"
+                    kubectl get nodes'
+                    for yml in ymls/* ; do envsubst < $yml | kubectl apply -f - ; done'
+                    kubectl -n poc set image deployment/primeiro-servico primeiro-servico=${env.PREVIOUS_IMAGE}
+                    kubectl -n poc rollout status deployment.v1.apps/primeiro-servico'
                 """
             }
         }
