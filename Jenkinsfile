@@ -165,13 +165,15 @@ pipeline {
             }
             steps{
                 withCredentials([file(credentialsId: 'dev-kubeconfig-cred', variable: 'KUBECRED')]) {
-                    sh 'rm -rf ~/.kube'
-                    sh 'mkdir ~/.kube'
-                    sh 'cat $KUBECRED > ~/.kube/config'
-                    sh 'kubectl get nodes'
-                    sh 'for yml in ymls/* ; do envsubst < $yml | kubectl apply -f - ; done'
-                    sh 'kubectl -n poc set image deployment/primeiro-servico primeiro-servico=$env.PREVIOUS_IMAGE'
-                    sh 'kubectl -n poc rollout status deployment.v1.apps/primeiro-servico'
+                    script {
+                        sh 'rm -rf ~/.kube'
+                        sh 'mkdir ~/.kube'
+                        sh 'cat $KUBECRED > ~/.kube/config'
+                        sh 'kubectl get nodes'
+                        sh 'for yml in ymls/* ; do envsubst < $yml | kubectl apply -f - ; done'
+                        sh "kubectl -n poc set image deployment/primeiro-servico primeiro-servico=${env.PREVIOUS_IMAGE}"
+                        sh 'kubectl -n poc rollout status deployment.v1.apps/primeiro-servico'
+                    }
                 }
             }
         }
