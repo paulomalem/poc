@@ -112,15 +112,26 @@ pipeline {
             }
             steps {
                 withCredentials([file(credentialsId: 'dev-kubeconfig-cred', variable: 'KUBECRED')]) {
-                    sh 'mkdir ~/.kube'
-                    sh 'cat $KUBECRED > ~/.kube/config'
-                    sh 'kubectl get nodes'
-                    //Capturando antiga imagem
-                    sh "PREVIOUS_IMAGE="\$5"(kubectl -n poc get deployments primeiro-servico -o=jsonpath='{$.spec.template.spec.containers[:1].image}')"
-                    sh "echo $PREVIOUS_IMAGE"
-                    sh 'for yml in ymls/* ; do envsubst < $yml | kubectl apply -f - ; done'
-                    sh 'kubectl -n poc set image deployment/primeiro-servico primeiro-servico=paulomalem/first:$BUILD_NUMBER'
-                    sh 'kubectl -n poc rollout status deployment.v1.apps/primeiro-servico'
+                    // sh 'mkdir ~/.kube'
+                    // sh 'cat $KUBECRED > ~/.kube/config'
+                    // sh 'kubectl get nodes'
+                    // //Capturando antiga imagem
+                    // sh "PREVIOUS_IMAGE=$(kubectl -n poc get deployments primeiro-servico -o=jsonpath='{$.spec.template.spec.containers[:1].image}')"
+                    // sh "echo $PREVIOUS_IMAGE"
+                    // sh 'for yml in ymls/* ; do envsubst < $yml | kubectl apply -f - ; done'
+                    // sh 'kubectl -n poc set image deployment/primeiro-servico primeiro-servico=paulomalem/first:$BUILD_NUMBER'
+                    // sh 'kubectl -n poc rollout status deployment.v1.apps/primeiro-servico'
+                    
+                    sh """
+                        mkdir ~/.kube
+                        cat $KUBECRED > ~/.kube/config
+                        kubectl get nodes'
+                        PREVIOUS_IMAGE=$(kubectl -n poc get deployments primeiro-servico -o=jsonpath='{$.spec.template.spec.containers[:1].image}')
+                        echo $PREVIOUS_IMAGE
+                        for yml in ymls/* ; do envsubst < $yml | kubectl apply -f - ; done
+                        kubectl -n poc set image deployment/primeiro-servico primeiro-servico=paulomalem/first:$BUILD_NUMBER
+                        kubectl -n poc rollout status deployment.v1.apps/primeiro-servico
+                    """
                 }
             }
         }
@@ -149,7 +160,7 @@ pipeline {
             }
             steps{
                 sh """#!/bin/bash +x
-                echo "Realizando Rollback"
+                echo "Realizando Rollback $PREVIOUS_IMAGE"
                 """
             }
         }
