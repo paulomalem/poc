@@ -164,13 +164,13 @@ pipeline {
                 expression { env.flagError == "true" }
             }
             steps{
-                sh """#!/bin/bash +x
-                    echo "Realizando Rollback ${env.PREVIOUS_IMAGE}"
-                    kubectl get nodes'
-                    for yml in ymls/* ; do envsubst < $yml | kubectl apply -f - ; done'
-                    kubectl -n poc set image deployment/primeiro-servico primeiro-servico=${env.PREVIOUS_IMAGE}
-                    kubectl -n poc rollout status deployment.v1.apps/primeiro-servico'
-                """
+                withCredentials([file(credentialsId: 'dev-kubeconfig-cred', variable: 'KUBECRED')]) {
+                        sh 'echo "Realizando Rollback ${env.PREVIOUS_IMAGE}"'
+                        sh 'kubectl get nodes'
+                        sh 'for yml in ymls/* ; do envsubst < $yml | kubectl apply -f - ; done'
+                        sh 'kubectl -n poc set image deployment/primeiro-servico primeiro-servico=${env.PREVIOUS_IMAGE}'
+                        sh 'kubectl -n poc rollout status deployment.v1.apps/primeiro-servico'
+                }
             }
         }
 	}
