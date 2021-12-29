@@ -1,0 +1,8 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: primeiro-servico-config
+  namespace: poc
+data:
+  SERVICO_2_BASE_URL: $SERVICO_2_BASE_URL
+  SENHA_POSTGRES: $SENHA_POSTGRES

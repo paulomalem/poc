@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: primeiro-servico
+  namespace: poc
+  labels:
+    account: primeiro-servico

@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: primeiro-servico
+  namespace: poc
+  labels:
+    app: primeiro-servico
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: primeiro-servico
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: primeiro-servico
+        version: v1
+    spec:
+      serviceAccountName: primeiro-servico
+      containers:
+      - name: primeiro-servico
+        image: paulomalem/first:$BUILD_NUMBER
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
