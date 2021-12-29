@@ -126,7 +126,7 @@ pipeline {
                         sh 'cat $KUBECRED > ~/.kube/config'
                         sh 'kubectl get nodes'
                         //Capturando antiga imagem
-                        env.PREVIOUS_IMAGE = sh( script: kubectl -n poc get deployments primeiro-servico -o=jsonpath='{$.spec.template.spec.containers[:1].image}',
+                        env.PREVIOUS_IMAGE = sh( script: "kubectl -n poc get deployments primeiro-servico -o=jsonpath='{$.spec.template.spec.containers[:1].image}'",
                              returnStdout: true).trim()
                         echo "PREVIOUS_IMAGE: ${env.PREVIOUS_IMAGE}"
                         // env.PREVIOUS_IMAGE= sh 'env.PREVIOUS_IMAGE=$(kubectl -n poc get deployments primeiro-servico -o=jsonpath="{$.spec.template.spec.containers[:1].image}")'
