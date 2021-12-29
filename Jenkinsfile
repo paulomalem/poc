@@ -120,17 +120,44 @@ pipeline {
                 }
             }
         }
-        stage('validate') {
+        // stage('Validate') {
+        //     steps {
+        //         timeout(30) {
+        //             script {
+        //                 CHOICES = ["Exito", "Falha"];    
+        //                     env.yourChoice = input  message: 'Por favor, realize a validação em 30 minutos',
+        //                                      ok : 'Exito',
+        //                                      id :'choice_id',
+        //                                     parameters: [
+        //                                         choice(choices: CHOICES,
+        //                                                  description: 'Se o Deploy não foi realizado com sucesso, o Rollback será realizado.',
+        //                                                  name: 'O Deploy foi realizado com sucesso?'),
+        //                                                  string(defaultValue: '', description: '', name: 'Informar o motivo.')]
+        //                     } 
+        //             }
+        //         }
+        // }
+        stage('Validação') {
+            agent none
+            when {
+                branch 'main'
+            }           
+            options {
+                timeout(time: 1, unit: 'HOURS') 
+            }
             steps {
-                timeout(30) {
-                    script {
+                script {
                         CHOICES = ["Exito", "Falha"];    
-                            env.yourChoice = input  message: 'Por favor, verifique a validação em 30 minutos', ok : 'Exito',id :'choice_id',
-                                            parameters: [choice(choices: CHOICES, description: 'O Deploy foi realizado com exito?', name: 'CHOICE'),
-                                                string(defaultValue: 'rollback', description: '', name: 'Informar o motivo.')]
-                            } 
-                    }
-                }
+                            env.yourChoice = input  message: 'Por favor, realize a validação em 30 minutos',
+                                             ok : 'Exito',
+                                             id :'choice_id',
+                                            parameters: [
+                                                choice(choices: CHOICES,
+                                                         description: 'Se o Deploy não foi realizado com sucesso, o Rollback será realizado.',
+                                                         name: 'O Deploy foi realizado com sucesso?'),
+                                                         string(defaultValue: 'SIM', description: 'Favor digitar apenas SIM Ou NAO', name: 'Informar o motivo.')]
+                } 
+            }
         }
         stage('Rollback') {
             when {
