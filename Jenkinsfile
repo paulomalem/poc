@@ -1,6 +1,5 @@
-pipeline{
-
-  agent none        
+pipeline {
+  agent none      
 
 	environment {
         //Others Credentials
@@ -18,9 +17,7 @@ pipeline{
 	}
 	stages {
 		stage('Build') {
-            agent {
-                label "linux"
-            }
+            agent { label 'linux' }
 			steps {
 				sh """
                     docker build -t first .
@@ -28,9 +25,7 @@ pipeline{
             }
 		}
         stage('Tagging') {
-            agent {
-                label "linux"
-            }
+            agent { label 'linux' }
 			steps {
 				sh """
                     docker tag first paulomalem/first:$BUILD_NUMBER
@@ -38,9 +33,7 @@ pipeline{
 			}
 		}
 		stage('Push Image (DokerHub') {
-            agent {
-                label "linux"
-            }
+            agent { label 'linux' }
 			steps {
 				sh """
                     docker logout
@@ -50,9 +43,7 @@ pipeline{
 			}
 		}
         stage('Deploy K8S (Desenvolvimento)') {
-            agent {
-                label "linux"
-            }
+            agent { label 'linux' }
             when {
                 branch 'develop'
             }
@@ -68,9 +59,7 @@ pipeline{
             }
         }    
         stage('Deploy K8S (Homologação)') {
-            agent {
-                label "linux"
-            }
+            agent { label 'linux' }
             when {
                 branch 'homolog'
             }
@@ -86,9 +75,7 @@ pipeline{
             }
         }
         stage('Deploy K8S (Homologação 02)') {
-            agent {
-                label "linux"
-            }
+            agent { label 'linux' }
             when {
                 branch 'homolog'
             }
@@ -105,9 +92,7 @@ pipeline{
             }
         }
         stage('Deploy K8S (Produção)') {
-            agent {
-                label "linux"
-            }
+            agent { label 'linux' }
             when {
                 branch 'main'
             }
