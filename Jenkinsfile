@@ -13,8 +13,8 @@ pipeline{
         
         //Kubernetes Credentials
         DEV_KUBECONFIG = credentials('dev-kubeconfig-cred')
-        HML_KUBECONFIG = credentials('hml-kubeconfig-cred')
-        PRD_KUBECONFIG = credentials('prd-kubeconfig-cred')
+        HML_KUBECONFIG = credentials('dev-kubeconfig-cred')
+        PRD_KUBECONFIG = credentials('dev-kubeconfig-cred')
 	}
 
 	stages {
@@ -62,7 +62,7 @@ pipeline{
                 branch 'homolog'
             }
             steps {
-                withCredentials([file(credentialsId: 'hml-kubeconfig-cred', variable: 'KUBECRED')]) {
+                withCredentials([file(credentialsId: 'dev-kubeconfig-cred', variable: 'KUBECRED')]) {
                     sh 'mkdir ~/.kube'
                     sh 'cat $KUBECRED > ~/.kube/config'
                     sh 'kubectl get nodes'
@@ -104,7 +104,7 @@ pipeline{
                 label "linux"
             }
             steps {
-                withCredentials([file(credentialsId: 'prd-kubeconfig-cred', variable: 'KUBECRED')]) {
+                withCredentials([file(credentialsId: 'dev-kubeconfig-cred', variable: 'KUBECRED')]) {
                     sh 'mkdir ~/.kube'
                     sh 'cat $KUBECRED > ~/.kube/config'
                     sh 'kubectl get nodes'
