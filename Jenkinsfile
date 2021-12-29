@@ -120,50 +120,36 @@ pipeline {
                 }
             }
         }
-        // stage('Validate') {
-        //     steps {
-        //         timeout(30) {
-        //             script {
-        //                 CHOICES = ["Exito", "Falha"];    
-        //                     env.yourChoice = input  message: 'Por favor, realize a validação em 30 minutos',
-        //                                      ok : 'Exito',
-        //                                      id :'choice_id',
-        //                                     parameters: [
-        //                                         choice(choices: CHOICES,
-        //                                                  description: 'Se o Deploy não foi realizado com sucesso, o Rollback será realizado.',
-        //                                                  name: 'O Deploy foi realizado com sucesso?'),
-        //                                                  string(defaultValue: '', description: '', name: 'Informar o motivo.')]
-        //                     } 
-        //             }
-        //         }
-        // }
-        stage('Validação') {
-            agent none
-            when {
-                branch 'main'
-            }           
-            options {
-                timeout(time: 1, unit: 'HOURS') 
-            }
-            steps {
-                script {
-                    CHOICES = ["SIM", "NAO"];    
-                        env.yourChoice = input  message: 'O Deploy foi executado com sucesso? OBS: Caso a resposta seja "NAO", o rollback será realizado.', ok : 'Proceed',id :'choice_id'
-                                        parameters: [choice(choices: CHOICES, name: 'Opções'),
-                                            string(defaultValue: 'NAO', description: '', name: 'NAO value')]
-                } 
+        stage('validate') {
+                steps {
+                    timeout(30) {
+                        script {
+                            CHOICES = ["deploy", "rollback"];    
+                                env.yourChoice = input  message: 'Please validate, this job will automatically ABORTED after 30 minutes even if no user input provided', ok : 'Proceed',id :'choice_id',
+                                                parameters: [choice(choices: CHOICES, description: 'Do you want to deploy or to rollback?', name: 'CHOICE'),
+                                                    string(defaultValue: 'rollback', description: '', name: 'rollback value')]
+                                } 
 
+                        }
+                    }
+                }
             }
-
-        } 
-        stage('Rollback') {
-            when {
-                expression { env.yourChoice == 'NAO' }
+            stage('Deploy') {
+                when {
+                    expression { env.yourChoice == 'deploy' }
+                }
+                steps {
+                    ...
+                }
             }
-            steps {
-                echo "Executando Rollback..."
+            stage('Rollback') {
+                when {
+                    expression { env.yourChoice == 'rollback' }
+                }
+                steps {
+                    ...
+                }
             }
-        }
 	}
 	post {
 		always {
