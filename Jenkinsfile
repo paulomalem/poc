@@ -91,6 +91,14 @@ pipeline {
                 }
             }
         }
+        stage 'Produção?' {
+            agent none
+            when {
+                branch 'main'
+            }
+            steps {
+                input message: "Deploy em Produção?"
+        }
         stage('Deploy K8S (Produção)') {
             agent { label 'linux' }
             when {
