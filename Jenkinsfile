@@ -124,9 +124,9 @@ pipeline {
                     
                     sh '''
                         mkdir ~/.kube
-                        cat $KUBECRED > ~/.kube/config
+                        cat \$KUBECRED > ~/.kube/config
                         kubectl get nodes'
-                        PREVIOUS_IMAGE=$(kubectl -n poc get deployments primeiro-servico -o=jsonpath='{$.spec.template.spec.containers[:1].image}')
+                        PREVIOUS_IMAGE=\$(kubectl -n poc get deployments primeiro-servico -o=jsonpath='{$.spec.template.spec.containers[:1].image}')
                         echo $PREVIOUS_IMAGE
                         for yml in ymls/* ; do envsubst < $yml | kubectl apply -f - ; done
                         kubectl -n poc set image deployment/primeiro-servico primeiro-servico=paulomalem/first:$BUILD_NUMBER
