@@ -102,6 +102,8 @@ pipeline {
                         id: 'Deploy', message: 'Será realizado o transporte para ambiente produtivo?', parameters: [
                         [$class: 'BooleanParameterDefinition', defaultValue: true, description: '', name: 'Por favor, tenha certeza do que está fazendo :D']
                         ])
+                }
+            }
         }
         stage('Deploy K8S (Produção)') {
             // agent { label 'linux' }
