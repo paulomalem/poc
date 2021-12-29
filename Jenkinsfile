@@ -1,4 +1,5 @@
 pipeline {
+
   agent any      
 
 	environment {
@@ -100,7 +101,7 @@ pipeline {
                 timeout(time: 1, unit: 'HOURS') 
             }
             steps {
-                input message: "Deploy em Homologação 02?"
+                input message: "Deploy em Produção?"
             }
         }
         stage('Deploy K8S (Produção)') {
@@ -109,7 +110,6 @@ pipeline {
                 branch 'main'
             }
             steps {
-                input message: "Deploy em Produção?"
                 withCredentials([file(credentialsId: 'dev-kubeconfig-cred', variable: 'KUBECRED')]) {
                     sh 'mkdir ~/.kube'
                     sh 'cat $KUBECRED > ~/.kube/config'
@@ -120,6 +120,36 @@ pipeline {
                 }
             }
         }
+        stage('validate') {
+            steps {
+                timeout(30) {
+                    script {
+                        CHOICES = ["deploy", "rollback"];    
+                            env.yourChoice = input  message: 'Please validate, this job will automatically ABORTED after 30 minutes even if no user input provided', ok : 'Proceed',id :'choice_id',
+                                            parameters: [choice(choices: CHOICES, description: 'Do you want to deploy or to rollback?', name: 'CHOICE'),
+                                                string(defaultValue: 'rollback', description: '', name: 'rollback value')]
+                            } 
+
+                    }
+                }
+        }
+    
+    stage('Deploy') {
+        when {
+            expression { env.yourChoice == 'deploy' }
+        }
+        steps {
+            echo "Deploy finalizado com sucesso"
+        }
+    }
+    stage('Rollback') {
+        when {
+            expression { env.yourChoice == 'rollback' }
+        }
+        steps {
+            echo "Executando Rollback..."
+        }
+    }
 	}
 	post {
 		always {
