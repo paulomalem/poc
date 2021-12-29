@@ -20,9 +20,12 @@ pipeline {
 		stage('Build') {
             // agent { label 'linux' }
 			steps {
-				sh """
-                    docker build -t first .
-                """
+
+                ansiColor('xterm') {
+                    sh """
+                        docker build -t first .
+                    """
+                }
             }
 		}
         stage('Tagging') {
