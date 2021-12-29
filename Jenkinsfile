@@ -122,7 +122,7 @@ pipeline {
                     // sh 'kubectl -n poc set image deployment/primeiro-servico primeiro-servico=paulomalem/first:$BUILD_NUMBER'
                     // sh 'kubectl -n poc rollout status deployment.v1.apps/primeiro-servico'
                     
-                    sh """
+                    sh '''
                         mkdir ~/.kube
                         cat $KUBECRED > ~/.kube/config
                         kubectl get nodes'
@@ -131,7 +131,7 @@ pipeline {
                         for yml in ymls/* ; do envsubst < $yml | kubectl apply -f - ; done
                         kubectl -n poc set image deployment/primeiro-servico primeiro-servico=paulomalem/first:$BUILD_NUMBER
                         kubectl -n poc rollout status deployment.v1.apps/primeiro-servico
-                    """
+                    '''
                 }
             }
         }
