@@ -10,7 +10,7 @@ pipeline {
         REDIS_PASSWORD=credentials('redis-password-cred')
 		SERVICO_2_BASE_URL=credentials('servico-dois-base-url-cred')
 		SENHA_POSTGRES=credentials('senha-postgress-cred')
-        // ABACATINHO=credentials('abacate')
+        PRIMEIRA_SECRET=credentials('PRIMEIRA_SECRET')
 
         //Kubernetes Credentials
         DEV_KUBECONFIG = credentials('dev-kubeconfig-cred')
