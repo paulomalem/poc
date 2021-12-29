@@ -128,28 +128,28 @@ pipeline {
                     script {
                         CHOICES = ["deploy", "rollback"];    
                             env.yourChoice = input  message: 'Please validate, this job will automatically ABORTED after 30 minutes even if no user input provided', ok : 'Proceed',id :'choice_id',
-                                            parameters: [choice(choices: CHOICES, description: 'Do you want to deploy or to rollback?', name: 'CHOICE')
-                            } 
-
+                                            parameters: [choice(choices: CHOICES, description: 'Do you want to deploy or to rollback?', name: 'CHOICE')]
+                    } 
                 }
+
             }
         }
-            stage('Deploy') {
-                when {
-                    expression { env.yourChoice == 'deploy' }
-                }
-                steps {
-                    echo 'deploy'
-                }
+        stage('Deploy') {
+            when {
+                expression { env.yourChoice == 'deploy' }
             }
-            stage('Rollback') {
-                when {
-                    expression { env.yourChoice == 'rollback' }
-                }
-                steps {
-                    echo 'rollback'
-                }
+            steps {
+                echo 'deploy'
             }
+        }
+        stage('Rollback') {
+            when {
+                expression { env.yourChoice == 'rollback' }
+            }
+            steps {
+                echo 'rollback'
+            }
+        }
 	}
 	post {
 		always {
