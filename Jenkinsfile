@@ -139,7 +139,7 @@ pipeline {
                     expression { env.yourChoice == 'deploy' }
                 }
                 steps {
-                    ...
+                    echo 'deploy'
                 }
             }
             stage('Rollback') {
@@ -147,7 +147,7 @@ pipeline {
                     expression { env.yourChoice == 'rollback' }
                 }
                 steps {
-                    ...
+                    echo 'rollback'
                 }
             }
 	}
