@@ -147,21 +147,17 @@ pipeline {
             }
             steps {
                 script {
-                        CHOICES = ["Exito", "Falha"];    
-                            env.yourChoice = input  message: 'Por favor, realize a validação em 30 minutos',
-                                             ok : 'Exito',
-                                             id :'choice_id',
-                                            parameters: [
-                                                choice(choices: CHOICES,
-                                                         description: 'Se o Deploy não foi realizado com sucesso, o Rollback será realizado.',
-                                                         name: 'O Deploy foi realizado com sucesso?'),
-                                                         string(defaultValue: 'SIM', description: 'Favor digitar apenas SIM Ou NAO', name: 'Informar o motivo.')]
-                } 
+                    CHOICES = ["sucesso", "falha"];    
+                        env.yourChoice = input  message: 'Please validate, this job will automatically ABORTED after 30 minutes even if no user input provided', ok : 'Proceed',id :'choice_id'
+                        } 
+
+                }
+
             }
         }
         stage('Rollback') {
             when {
-                expression { env.yourChoice == 'rollback' }
+                expression { env.yourChoice == 'falha' }
             }
             steps {
                 echo "Executando Rollback..."
