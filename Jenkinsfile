@@ -5,7 +5,7 @@ pipeline {
 	environment {
         //Others Credentials
 		DOCKERHUB_CREDENTIALS=credentials('dockerhub-pauloalem-cred')
-		PREVIOUS_IMAGE='XPTO'
+		// PREVIOUS_IMAGE='XPTO'
 
         //Application Credentials
         REDIS_PASSWORD=credentials('redis-password-cred')
@@ -126,7 +126,7 @@ pipeline {
                         sh 'cat $KUBECRED > ~/.kube/config'
                         sh 'kubectl get nodes'
                         //Capturando antiga imagem
-                        sh 'env.PREVIOUS_IMAGE=$(kubectl -n poc get deployments primeiro-servico -o=jsonpath="{$.spec.template.spec.containers[:1].image}")'
+                        sh 'PREVIOUS_IMAGE=$(kubectl -n poc get deployments primeiro-servico -o=jsonpath="{$.spec.template.spec.containers[:1].image}")'
                         sh 'echo $PREVIOUS_IMAGE'
                         sh 'for yml in ymls/* ; do envsubst < $yml | kubectl apply -f - ; done'
                         sh 'kubectl -n poc set image deployment/primeiro-servico primeiro-servico=paulomalem/first:$BUILD_NUMBER'
