@@ -120,38 +120,32 @@ pipeline {
                 }
             }
         }
-        stage('validate') {
-                steps {
-                script {
-                    env.flagError = "false"
-                    try {
-                    input(message: 'Please validate, this job will automatically ABORTED after 30 minutes even if no user input provided', ok: 'Proceed')
+        stage('Validação') {
+            when {
+                branch 'main'
+            }
+            steps {
+                timeout(30) {
+                    script {
+                        env.flagError = "false"
+                        try {
+                            input(message: 'Valide esse job dentro dos proximos 30 minutos, caso contrário o rollback será iniciado.', ok: 'Proceed')
 
-                    }catch(e){
-                        println "input aborted or timeout expired, will try to rollback."
-                        env.flagError = "true"        
+                        }catch(e){
+                            println "Abortado ou timeout estourando, iniciando rollback...."
+                            env.flagError = "true"        
+                        }
                     }
                 }
-                }
-            }
-
-        stage("If user selects Proceed"){
-            when{
-                expression { env.flagError == "false" }
-            }
-            steps{
-                sh """#!/bin/bash +x
-                echo "User selected proceed"
-                """
             }
         }
-        stage("rollback if flag error true"){
+        stage("Rollback"){
             when{
                 expression { env.flagError == "true" }
             }
             steps{
                 sh """#!/bin/bash +x
-                echo "User selected Abort"
+                echo "Realizando Rollback"
                 """
             }
         }
