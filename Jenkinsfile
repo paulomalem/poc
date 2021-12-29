@@ -149,9 +149,7 @@ pipeline {
                 script {
                     CHOICES = ["sucesso", "falha"];    
                         env.yourChoice = input  message: 'Please validate, this job will automatically ABORTED after 30 minutes even if no user input provided', ok : 'Proceed',id :'choice_id'
-                        } 
-
-                }
+                } 
 
             }
         }
