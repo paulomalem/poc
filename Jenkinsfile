@@ -91,7 +91,7 @@ pipeline {
                 }
             }
         }
-        stage 'Produção?' {
+        stage('Produção?') {
             agent none
             when {
                 branch 'main'
