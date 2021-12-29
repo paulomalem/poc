@@ -165,7 +165,7 @@ pipeline {
             }
             steps{
                 sh """#!/bin/bash +x
-                echo "Realizando Rollback env.PREVIOUS_IMAGE"
+                echo "Realizando Rollback ${env.PREVIOUS_IMAGE}"
                 """
             }
         }
