@@ -39,7 +39,7 @@ pipeline {
 				sh """
                     docker logout
                     echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
-                    push paulomalem/first:$BUILD_NUMBER || exit 0
+                    docker push paulomalem/first:$BUILD_NUMBER || exit 0
                 """
 			}
 		}
