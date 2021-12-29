@@ -151,14 +151,11 @@ pipeline {
                         env.yourChoice = input  message: 'O Deploy foi executado com sucesso? OBS: Caso a resposta seja "NAO", o rollback será realizado.', ok : 'Proceed',id :'choice_id'
                                         parameters: [choice(choices: CHOICES, name: 'Opções'),
                                             string(defaultValue: 'NAO', description: '', name: 'NAO value')]
-                        } 
-
-                }
-
                 } 
 
             }
-        }
+
+        } 
         stage('Rollback') {
             when {
                 expression { env.yourChoice == 'NAO' }
