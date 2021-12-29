@@ -16,9 +16,7 @@ pipeline{
         HML_KUBECONFIG = credentials('dev-kubeconfig-cred')
         PRD_KUBECONFIG = credentials('dev-kubeconfig-cred')
 	}
-
 	stages {
-
 		stage('Build') {
 			steps {
 				sh """
@@ -76,13 +74,14 @@ pipeline{
             when {
                 branch 'homolog'
             }
-            input {
-                message "Deploy em Homologação 02?"
-            }
+            // input {
+            //     message "Deploy em Homologação 02?"
+            // }
             agent {
                 label "linux"
             }
             steps {
+                input message: "Deploy em Homologação 02?"
                 withCredentials([file(credentialsId: 'dev-kubeconfig-cred', variable: 'KUBECRED')]) {
                     sh 'mkdir ~/.kube'
                     sh 'cat $KUBECRED > ~/.kube/config'
