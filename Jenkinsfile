@@ -20,11 +20,9 @@ pipeline {
 		stage('Build') {
             // agent { label 'linux' }
 			steps {
-                ansiColor('xterm') {
-                    sh """
-                        docker build -t first .
-                    """
-                }
+                sh """
+                    docker build -t first .
+                """
             }
 		}
         stage('Tagging') {
@@ -123,31 +121,38 @@ pipeline {
             }
         }
         stage('validate') {
-            steps {
-                timeout(30) {
-                    script {
-                        CHOICES = ["deploy", "rollback"];    
-                            env.yourChoice = input  message: 'Please validate, this job will automatically ABORTED after 30 minutes even if no user input provided', ok : 'Proceed',id :'choice_id',
-                                            parameters: [choice(choices: CHOICES, description: 'Do you want to deploy or to rollback?', name: 'CHOICE')]
-                    } 
-                }
+                steps {
+                script {
+                    env.flagError = "false"
+                    try {
+                    input(message: 'Please validate, this job will automatically ABORTED after 30 minutes even if no user input provided', ok: 'Proceed')
 
+                    }catch(e){
+                        println "input aborted or timeout expired, will try to rollback."
+                        env.flagError = "true"        
+                    }
+                }
+                }
+            }
+
+        stage("If user selects Proceed"){
+            when{
+                expression { env.flagError == "false" }
+            }
+            steps{
+                sh """#!/bin/bash +x
+                echo "User selected proceed"
+                """
             }
         }
-        stage('Deploy') {
-            when {
-                expression { env.yourChoice == 'deploy' }
+        stage("rollback if flag error true"){
+            when{
+                expression { env.flagError == "true" }
             }
-            steps {
-                echo 'deploy'
-            }
-        }
-        stage('Rollback') {
-            when {
-                expression { env.yourChoice == 'rollback' }
-            }
-            steps {
-                echo 'rollback'
+            steps{
+                sh """#!/bin/bash +x
+                echo "User selected Abort"
+                """
             }
         }
 	}
