@@ -93,18 +93,18 @@ pipeline {
                 }
             }
         }
-        stage('Produção?') {
-            agent none
-            when {
-                branch 'main'
-            }           
-            options {
-                timeout(time: 1, unit: 'HOURS') 
-            }
-            steps {
-                input message: "Deploy em Produção?"
-            }
-        }
+        // stage('Produção?') {
+        //     agent none
+        //     when {
+        //         branch 'main'
+        //     }           
+        //     options {
+        //         timeout(time: 1, unit: 'HOURS') 
+        //     }
+        //     steps {
+        //         input message: "Deploy em Produção?"
+        //     }
+        // }
         stage('Deploy K8S (Produção)') {
             // agent { label 'linux' }
             when {
