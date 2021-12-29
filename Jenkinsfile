@@ -20,7 +20,6 @@ pipeline {
 		stage('Build') {
             // agent { label 'linux' }
 			steps {
-
                 ansiColor('xterm') {
                     sh """
                         docker build -t first .
