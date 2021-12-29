@@ -80,7 +80,7 @@ pipeline{
                 message "Deploy em Homologação 02?"
             }
             agent {
-                any
+                label "linux"
             }
             steps {
                 withCredentials([file(credentialsId: 'dev-kubeconfig-cred', variable: 'KUBECRED')]) {
@@ -101,7 +101,7 @@ pipeline{
                 message "Deploy em Produção?"
             }
             agent {
-                any
+                label "linux"
             }
             steps {
                 withCredentials([file(credentialsId: 'prd-kubeconfig-cred', variable: 'KUBECRED')]) {
