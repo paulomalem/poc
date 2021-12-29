@@ -95,14 +95,12 @@ pipeline {
             agent none
             when {
                 branch 'main'
+            }           
+            options {
+                timeout(time: 1, unit: 'HOURS') 
             }
             steps {
-                timeout(time: 30, unit: 'SECONDS') {
-                        userInput = input(
-                        id: 'Deploy', message: 'Será realizado o transporte para ambiente produtivo?', parameters: [
-                        [$class: 'BooleanParameterDefinition', defaultValue: true, description: '', name: 'Por favor, tenha certeza do que está fazendo :D']
-                        ])
-                }
+                input message: "Deploy em Homologação 02?"
             }
         }
         stage('Deploy K8S (Produção)') {
